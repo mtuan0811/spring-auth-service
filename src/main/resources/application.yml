@@ -1,0 +1,23 @@
+spring:
+  data:
+    mongodb:
+      port: 27017
+      username: root
+      password: rfqi3dz226
+      authentication-database: admin
+      host: mongodb.dev.svc.cluster.local
+      database: dbmain
+    redis:
+      host: redis-master-0.redis-headless.dev.svc.cluster.local
+      port: 6379
+      password: RqUwaj7H95
+security:
+  jwt:
+    jwtSecret: 72764ebeb874350a0a67d0bf914eff58660a0e8d36c5fa26c36f6e12a1f55865
+    jwtExpirationMs: 3600000
+    jwtRefreshExpirationMs: 86400000
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security=TRACE:
