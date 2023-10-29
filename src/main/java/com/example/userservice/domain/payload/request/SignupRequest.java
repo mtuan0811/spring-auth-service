@@ -1,4 +1,4 @@
-package com.example.userservice.payload.request;
+package com.example.userservice.domain.payload.request;
 
 import java.util.Set;
 

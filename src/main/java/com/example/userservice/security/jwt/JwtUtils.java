@@ -1,11 +1,10 @@
 package com.example.userservice.security.jwt;
 
-import com.example.userservice.components.HashGenerate;
-import com.example.userservice.services.impl.UserDetailsImpl;
+import com.example.userservice.security.services.impl.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -28,61 +27,73 @@ public class JwtUtils {
     @Value("${security.jwt.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    @Autowired
-    HashGenerate hashGenerate;
+    private final String accessToken = "access_token";
+    private final String refreshToken = "refresh_token";
 
-    public String generateJwtToken(Authentication authentication, Date date) {
+    public String generateJwtToken(Authentication authentication, String refreshToken) {
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        Date date = new Date((new Date()).getTime() + jwtExpirationMs);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("sub", userPrincipal.getUsername());
+        claims.put("exp", date);
+        claims.put("refresh_token", refreshToken);
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
-                .setClaims(getClaims(userPrincipal.getUsername(),date))
-                .setIssuedAt(date)
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(date)
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String generateTokenFromUsername(String username) {
-        Date date = new Date();
+    public String generateTokenFromUsername(String username, String refreshToken) {
+        Date date = new Date((new Date()).getTime() + jwtExpirationMs);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("sub", username);
+        claims.put("exp", date);
+        claims.put("refresh_token", refreshToken);
         return Jwts.builder()
                 .setSubject(username)
-                .setClaims(getClaims(username,date))
-                .setIssuedAt(date)
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(date)
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public Claims getClaimsFromToken(String token) {
-        Claims claims;
-        try {
-            claims = Jwts.parser()
-                    .setSigningKey(key())
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            claims = null;
-        }
-        return claims;
-    }
-
-    private Map<String, String> getClaims(String username, Date date){
-        String hash = hashGenerate.getHash(username, date);
-        Map<String, String> map = new HashMap<>();
-        map.put("hash", hash);
-        return map;
-    }
     private Key key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
     public String getUserNameFromJwtToken(String token) {
-        System.out.println("JSON: "+Jwts.parser().setSigningKey(key()).build()
-                .parseClaimsJws(token).getBody().toString());
-        return Jwts.parser().setSigningKey(key()).build()
-                .parseClaimsJws(token).getBody().getSubject();
+        Claims claims =  Jwts.parser().setSigningKey(key()).build()
+                .parseClaimsJws(token).getBody();
+        String username = claims.get("sub", String.class);
+        return username;
+    }
+
+    public String getRefreshTokenFromJwt(String token) {
+        Claims claims =  Jwts.parser().setSigningKey(key()).build()
+                .parseClaimsJws(token).getBody();
+        String refreshToken = claims.get("refresh_token", String.class);
+        return refreshToken;
+    }
+
+    public ResponseCookie generateJwtCookie(String jwt) {
+        return ResponseCookie.from(accessToken, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
+    }
+
+    public ResponseCookie generateRefreshTokenCookie(String jwt) {
+        return ResponseCookie.from(refreshToken, jwt).path("/api").httpOnly(true).build();
+    }
+
+    public ResponseCookie getCleanJwtCookie() {
+        return ResponseCookie.from(accessToken, null).path("/api").build();
+    }
+
+    public ResponseCookie getCleanRefreshTokenCookie() {
+        return ResponseCookie.from(refreshToken, null).path("/api").build();
     }
 
     public boolean validateJwtToken(String authToken) {

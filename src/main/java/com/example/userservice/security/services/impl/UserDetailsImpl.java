@@ -1,6 +1,6 @@
-package com.example.userservice.services.impl;
+package com.example.userservice.security.services.impl;
 
-import com.example.userservice.models.User;
+import com.example.userservice.domain.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

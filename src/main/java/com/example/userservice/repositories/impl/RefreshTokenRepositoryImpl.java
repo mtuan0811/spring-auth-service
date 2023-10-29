@@ -1,6 +1,6 @@
 package com.example.userservice.repositories.impl;
 
-import com.example.userservice.models.RefreshToken;
+import com.example.userservice.domain.models.RefreshToken;
 import com.example.userservice.repositories.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -33,5 +33,10 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     @Override
     public long deleteToken(RefreshToken refreshToken) {
         return mongoTemplate.remove(refreshToken).getDeletedCount();
+    }
+
+    @Override
+    public long deleteTokenByUser(String userId) {
+        return mongoTemplate.remove(new Query(Criteria.where("userId").is(userId)), RefreshToken.class).getDeletedCount();
     }
 }

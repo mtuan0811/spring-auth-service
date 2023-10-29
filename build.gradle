@@ -36,7 +36,6 @@ dependencies {
     implementation 'org.springframework.session:spring-session-data-redis'
     implementation 'redis.clients:jedis'
     implementation 'commons-codec:commons-codec:1.13'
-
 }
 
 tasks.named('test') {

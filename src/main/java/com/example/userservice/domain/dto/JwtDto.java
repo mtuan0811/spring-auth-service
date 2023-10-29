@@ -1,11 +1,11 @@
-package com.example.userservice.payload.response;
+package com.example.userservice.domain.dto;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class JwtResponse {
+public class JwtDto {
     private String token;
     private String type = "Bearer";
     private String refreshToken;
@@ -14,7 +14,7 @@ public class JwtResponse {
     private String email;
     private List<String> roles;
 
-    public JwtResponse(String accessToken, String refreshToken, String id, String username, String email, List<String> roles) {
+    public JwtDto(String accessToken, String refreshToken, String id, String username, String email, List<String> roles) {
         this.token = accessToken;
         this.refreshToken = refreshToken;
         this.id = id;

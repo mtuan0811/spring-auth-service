@@ -1,6 +1,6 @@
-package com.example.userservice.models;
+package com.example.userservice.domain.models;
 
-import com.example.userservice.models.enums.ERole;
+import com.example.userservice.domain.models.enums.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

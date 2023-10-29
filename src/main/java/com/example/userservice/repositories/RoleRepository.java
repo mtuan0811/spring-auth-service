@@ -1,7 +1,7 @@
 package com.example.userservice.repositories;
 
-import com.example.userservice.models.Role;
-import com.example.userservice.models.enums.ERole;
+import com.example.userservice.domain.models.Role;
+import com.example.userservice.domain.models.enums.ERole;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

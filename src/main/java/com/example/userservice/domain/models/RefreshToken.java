@@ -1,4 +1,4 @@
-package com.example.userservice.models;
+package com.example.userservice.domain.models;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
