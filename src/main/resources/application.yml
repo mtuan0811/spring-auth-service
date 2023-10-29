@@ -1,19 +1,19 @@
 spring:
   data:
     mongodb:
-      port: 27017
-      username: root
-      password: rfqi3dz226
+      port: ${MONGODB_POST:27017}
+      username: ${MONGODB_USER:root}
+      password: ${MONGODB_PASSWORD}
       authentication-database: admin
-      host: mongodb.dev.svc.cluster.local
-      database: dbmain
+      host: ${MONGODB_HOST}
+      database: ${MONGODB_DATABASE}
     redis:
-      host: redis-master-0.redis-headless.dev.svc.cluster.local
-      port: 6379
-      password: RqUwaj7H95
+      host: ${REDIS_HOST}
+      port: ${REDIS_POST:6379}
+      password: ${REDIS_PASSWORD}
 security:
   jwt:
-    jwtSecret: 72764ebeb874350a0a67d0bf914eff58660a0e8d36c5fa26c36f6e12a1f55865
+    jwtSecret: ${JWT_SECRET}
     jwtExpirationMs: 3600000
     jwtRefreshExpirationMs: 86400000
 #logging:

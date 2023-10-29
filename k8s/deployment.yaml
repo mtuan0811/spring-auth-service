@@ -31,3 +31,28 @@ spec:
       containers:
         - name: user-service
           image: user-service
+          env:
+            - name: MONGODB_HOST
+              value: mongodb.dev.svc.cluster.local
+            - name: MONGODB_USER
+              value: root
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: mongodb-root-password
+            - name: MONGODB_POST
+              value: "27017"
+            - name: MONGODB_DATABASE
+              value: dbmain
+            - name: REDIS_HOST
+              value: redis-master-0.redis-headless.dev.svc.cluster.local
+            - name: REDIS_POST
+              value: "6379"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis
+                  key: redis-password
+            - name: JWT_SECRET
+              value: 72764ebeb874350a0a67d0bf914eff58660a0e8d36c5fa26c36f6e12a1f55865
