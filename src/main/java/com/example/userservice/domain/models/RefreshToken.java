@@ -18,9 +18,7 @@ import java.util.Date;
 @CompoundIndexes({
         @CompoundIndex(name = "userId_refreshtoken", def = "{'userId' : 1, 'user.id': 1}")
 })
-public class RefreshToken {
-    @Id
-    private String id;
+public class RefreshToken extends BaseEntity{
 
     @NotBlank
     private String token;

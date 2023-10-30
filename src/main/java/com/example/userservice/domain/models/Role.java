@@ -11,9 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role {
-    @Id
-    private String id;
-
+public class Role extends BaseEntity{
     private ERole name;
 }

@@ -15,10 +15,7 @@ import java.util.Set;
 @Document(collection = "accounts")
 @Data
 @NoArgsConstructor
-public class User {
-    @Id
-    private String id;
-
+public class User extends BaseEntity{
     @NotBlank
     @Size(max = 20)
     private String username;
